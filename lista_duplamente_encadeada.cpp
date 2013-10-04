@@ -2,6 +2,11 @@
 #include <cstdlib>
 #include <ctime>
 
+/**
+ * Fábio Luciano  - 1224290128
+ * Jano Guimarães - 1224290055
+ */
+
 using namespace std;
 
 /**
@@ -26,25 +31,45 @@ listaDuplamenteEncadeada* menorElemento(listaDuplamenteEncadeada* listaCriada);
 bool possuiAnterior(listaDuplamenteEncadeada* listaCriada);
 bool possuiProximo(listaDuplamenteEncadeada* listaCriada);
 void imprimirLista(listaDuplamenteEncadeada* listaCriada);
+int desenhaMenuOpcoes();
 
 /**
  * Fim - Definição de protótipos
  */
 
 int main() {
+    int opcaoRecebida, valorInformado, valorApos;
     listaDuplamenteEncadeada* listaCriada = NULL;
 
-    listaCriada = inserirElemento(listaCriada, 10);
-    listaCriada = inserirElemento(listaCriada, 20);
-    listaCriada = inserirElemento(listaCriada, 30);
-    listaCriada = inserirElemento(listaCriada, 40);
-    listaCriada = inserirElemento(listaCriada, 25);
+    while(opcaoRecebida = desenhaMenuOpcoes()){
 
+        if(opcaoRecebida == 1){
+            cout << "Digite um valor para incluir na lista:" << endl;
+            cin >> valorInformado;
+            listaCriada = inserirElemento(listaCriada, valorInformado);
+        } else if(opcaoRecebida == 2) {
+            cout << "Digite um valor para incluir na lista:" << endl;
+            cin >> valorInformado;
 
-    listaDuplamenteEncadeada* itemBonitinho = listaCriada->itemProximo;
-    listaDuplamenteEncadeada* itemMaisBonitinho = itemBonitinho->itemProximo;
-    listaDuplamenteEncadeada* itemMaisQueBonitinho = itemMaisBonitinho->itemProximo;
-    listaCriada = inserirElemento(listaCriada, 666, itemMaisBonitinho);
+            cout << "Inserir depois de: " << endl;
+            cin >> valorApos;
+
+            listaDuplamenteEncadeada* endereco = buscarElemento(listaCriada, valorApos);
+            listaCriada = inserirElemento(listaCriada, valorInformado, endereco);
+        } else if(opcaoRecebida == 3){
+            cout << "Digite um valor para excluir da lista:" << endl;
+            cin >> valorInformado;
+            listaCriada =  removerElemento(listaCriada, valorInformado);
+        } else if(opcaoRecebida == 4){
+             break;
+        }
+
+    }
+
+    cout << "###########################" << endl;
+    cout << "# Lista final             #" << endl;
+    cout << "###########################" << endl;
+    imprimirLista(listaCriada);
 
 }
 
@@ -92,10 +117,40 @@ listaDuplamenteEncadeada* inserirElemento(listaDuplamenteEncadeada* listaCriada,
             proximoItem->itemAnterior = lista->itemProximo;
         }
     }
+
     cout << "Item adicionado" << endl;
     imprimirLista(listaCriada);
 
     return listaCriada;
+}
+
+/**
+ * [buscarElemento busca um elemento dado uma determinada lista]
+ * @param  listaCriada
+ * @param  valorProcurado
+ * @return                listaDuplamenteEncadeada
+ */
+listaDuplamenteEncadeada* buscarElemento(listaDuplamenteEncadeada* listaCriada, int valorProcurado) {
+    // Primeiro verificamos se a lista está vazia, para não fazermos iterações
+    // desnecessárias
+
+    if(listaCriada == NULL) {
+        cout << "A lista estah vazia. Nao ha valores para procurar";
+        return NULL;
+    } else {
+
+        listaDuplamenteEncadeada* lista = listaCriada;
+
+        // A lista possui itens, vamos iterar sobre eles procurando o valor
+        for(; lista != NULL && lista->valor != valorProcurado; lista = lista->itemProximo);
+
+            if(lista == NULL) {
+                cout << "O valor nao foi encontrado na lista.";
+                return NULL;
+            } else {
+                return lista;
+            }
+    }
 }
 
 /**
@@ -109,7 +164,7 @@ listaDuplamenteEncadeada* removerElemento(listaDuplamenteEncadeada* listaCriada,
     // desnecessárias
 
     if(listaCriada == NULL) {
-        cout << "A lista estah vazia. Nao ha valores para remover";
+        cout << "A lista estah vazia. Nao ha valores para remover" << endl;
         return NULL;
     } else {
 
@@ -174,6 +229,22 @@ bool possuiProximo(listaDuplamenteEncadeada* listaCriada) {
     }
 
     return false;
+}
+
+int desenhaMenuOpcoes() {
+    int opcaoSelecionada;
+
+    cout<<"Digite uma opção"<<endl;
+    cout << "###########################" << endl;
+    cout << "# 1 - Inserir novo item   #" << endl;
+    cout << "# 2 - Inserir apos um itm #" << endl;
+    cout << "# 3 - Remover item        #" << endl;
+    cout << "# 4 - Sair                #" << endl;
+    cout << "###########################" << endl;
+
+    cin >> opcaoSelecionada;
+
+    return opcaoSelecionada;
 }
 
 
